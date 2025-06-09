@@ -25,7 +25,7 @@ There are three versions of the program:
 
 ## License
 
-This project is licensed. See the `LICENSE` file in the root directory for details.
+This project is under MIT license. See the `LICENSE` file in the root directory for details.
 
 ---
 
