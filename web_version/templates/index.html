@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main page</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, yellow, orange);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        body,
+        input {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+
+        *::selection {
+            color: blue;
+        }
+
+        #infoDiv {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: darkblue;
+        }
+
+        #mainForm {
+            margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #mainForm input {
+            width: 275px;
+            border: 1px dashed blue;
+            border-radius: 10px;
+            padding: 4px;
+            color: darkblue;
+            background: transparent;
+        }
+
+        #mainForm input:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+            color: blue;
+            box-shadow: 1px 1px 10px blue,
+                -1px -1px 10px blue;
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="infoDiv">
+        <h1 id="infoHeader">Sound wave generator</h1>
+        <p id="infoParagraph">The given parameters will be used to form a sinusoidal graph(sound wave) and save it to a file</p>
+    </div>
+    <form action="/save" method="post" name="mainForm" id="mainForm">
+        <input type="number" name="sampleRateInput" id="sampleRateInput" placeholder="Enter sample rate(Hz)" required>
+        <input type="number" name="durationInput" id="durationInput" placeholder="Enter duration(s)" required>
+        <input type="number" name="amplitudeInput" id="amplitudeInput" placeholder="Enter amplitude(between 0 and 1)"
+            step="any" required>
+        <input type="number" name="lowerFrequencyInput" id="lowerFrequencyInput"
+            placeholder="Enter lower frequency point(Hz)" required>
+        <input type="number" name="higherFrequencyInput" id="higherFrequencyInput"
+            placeholder="Enter higher frequency point(Hz)" required>
+        <input type="submit" value="Generate sound wave" name="submitInput" id="submitInput">
+    </form>
+
+    <script>
+        const form = document.forms[0];
+        const submitInput = document.querySelector("#submitInput");
+        const sampleRateInput = document.querySelector("#sampleRateInput");
+        const durationInput = document.querySelector("#durationInput");
+        const amplitudeInput = document.querySelector("#amplitudeInput");
+        const lowerFrequencyInput = document.querySelector("#lowerFrequencyInput");
+        const higherFrequencyInput = document.querySelector("#higherFrequencyInput");
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const sampleRate = Number(sampleRateInput.value);
+            const duration = Number(durationInput.value);
+            const amplitude = Number(amplitudeInput.value);
+            const lowerFreq = Number(lowerFrequencyInput.value);
+            const higherFreq = Number(higherFrequencyInput.value);
+
+            if (
+                !isNaN(sampleRate) &&
+                !isNaN(duration) &&
+                !isNaN(amplitude) &&
+                !isNaN(lowerFreq) &&
+                !isNaN(higherFreq) &&
+                sampleRate >= 1000 && sampleRate <= 384000 &&
+                duration >= 1 && duration <= 10 &&
+                amplitude >= 0 && amplitude <= 1 &&
+                lowerFreq >= 20 &&
+                higherFreq <= 20000 &&
+                lowerFreq < higherFreq
+            ) {
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                } else {
+                    form.submit();
+                }
+            } else {
+                window.location.href = "/values_error";
+            }
+        });
+    </script>
+</body>
+
+</html>

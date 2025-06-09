@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Values error</title>
+    <style>
+        *::selection {
+            color: blue;
+        }
+
+        body {
+            background: linear-gradient(135deg, yellow, orange);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        body,
+        #goToMainPageBtn {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: darkblue;
+        }
+
+        #errorB {
+            color: red;
+        }
+
+        #notificationB {
+            color: darkgreen;
+        }
+
+        #mainSection,
+        #infoSection,
+        #tableSection {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            flex-direction: column;
+        }
+
+        #tableHeader {
+            margin-top: 25px;
+            color: darkblue;
+            font-size: 30px;
+        }
+
+        table,
+        tr,
+        td,
+        th {
+            border: 1px solid blue;
+            padding: 3px;
+        }
+
+        #goToMainPageBtn {
+            margin-top: 25px;
+            border: 1px dashed darkblue;
+            border-radius: 10px;
+            padding: 5px;
+            background: transparent;
+        }
+
+        #goToMainPageBtn:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+            box-shadow: 1px 1px 10px blue,
+                -1px -1px 10px blue;
+            color: blue;
+            transition: all 0.3s ease-in-out;
+        }
+
+        @media (max-width:580px) {
+            #tableHeader {
+                font-size: 20px;
+            }
+
+            th,
+            td {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 520px) {
+
+            th,
+            td {
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            th,
+            td {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section id="mainSection">
+        <section id="infoSection">
+            <h2 id="errorHeader"><b id="errorB">Error:</b> Value or values - incorrect</h2>
+            <h3 id="notificationHeader"><b id="notificationB">Notification:</b> Amplitude should be a float number</h3>
+        </section>
+        <section id="tableSection">
+            <h2 id="tableHeader">Table of values ranges</h2>
+            <table id="mainTable">
+                <tr id="firstRow">
+                    <th>Value</th>
+                    <th>Measurement unit</th>
+                    <th>Minimum value</th>
+                    <th>Maximum value</th>
+                </tr>
+                <tr id="secondRow">
+                    <td>Sample rate</td>
+                    <td>Hz</td>
+                    <td>1000</td>
+                    <td>384000</td>
+                </tr>
+                <tr id="thirdRow">
+                    <td>Duration</td>
+                    <td>s</td>
+                    <td>1</td>
+                    <td>10</td>
+                </tr>
+                <tr id="fourthRow">
+                    <td>Amplitude</td>
+                    <td>Float between 0 and 1</td>
+                    <td>0</td>
+                    <td>1</td>
+                </tr>
+                <tr id="fifthRow">
+                    <td>Frequency</td>
+                    <td>Hz</td>
+                    <td>20(lower)</td>
+                    <td>20000(higher)</td>
+                </tr>
+            </table>
+        </section>
+        <button id="goToMainPageBtn">Go to main page</button>
+    </section>
+
+    <script>
+        const goToMainPageBtn = document.querySelector("#goToMainPageBtn");
+        goToMainPageBtn.addEventListener("click", () => {
+            window.location.href = "/";
+        })
+    </script>
+</body>
+
+</html>

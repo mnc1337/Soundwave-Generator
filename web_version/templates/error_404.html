@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page was not found</title>
+    <style>
+        *::selection {
+            background-color: gold;
+            color: blue;
+        }
+
+        #errorCodeHeader::selection {
+            color: darkred;
+        }
+
+        body {
+            background: linear-gradient(135deg, yellow, orange);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        body,
+        button {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        #errorCodeHeader {
+            font-size: 60px;
+            color: red;
+        }
+
+        #errorHeader {
+            font-size: 30px;
+            color: darkblue;
+        }
+
+        #mainPageBtn {
+            margin-top: 35px;
+            color: darkblue;
+            border: 1px dashed darkblue;
+            border-radius: 10px;
+            padding: 5px;
+            background: transparent;
+        }
+
+        #mainPageBtn:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+            color: blue;
+            box-shadow: 1px 1px 10px blue,
+                -1px -1px 10px blue;
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="errorCodeHeader">404</h1>
+    <h2 id="errorHeader">Page was not found</h2>
+    <button id="mainPageBtn">Go to main page</button>
+    <script>
+        const mainPageBtn = document.querySelector("#mainPageBtn");
+        mainPageBtn.addEventListener("click", () => {
+            window.location.href = "/";
+        })
+    </script>
+</body>
+
+</html>
