@@ -3,124 +3,158 @@ import numpy as np
 import os, platform, subprocess
 from datetime import datetime
 
-def main():
-    print("It`s a console program for generating sound waves. According to the given parameters(if they are correct) it will generate sound wave.")
-    sample_rate = input("Enter sample rate(Hz): ")
-    duration = input("Enter duration(seconds): ")
-    amplitude = input("Enter amplitude(number from 0 to 1): ")
-    freq_start = input("Enter the lowest point of frequency(Hz): ")
-    freq_end = input("Enter the highest point of frequency(Hz): ")
-
-    inputs = [sample_rate, duration, amplitude, freq_start, freq_end]
-
-    if not all(inputs):
-        print("Error. Some of inputs are null.")
-        input("Press Enter key to close this tab... ")
-        return False
-    
-    try:
-        sample_rate = int(sample_rate)
-        duration = int(duration)
-        amplitude = float(amplitude)
-        freq_start = int(freq_start)
-        freq_end = int(freq_end)
-
-    except ValueError as value_err:
-        print("Value error")
-        print(f"Exception: {str(value_err)}")
-        input("Press Enter key to close this tab... ")
-        return False
-
-    if 384000 >= sample_rate >= 500 and 10 >= duration >= 1 and 1 >= amplitude >= 0 and freq_start >= 0 and freq_end <= 192000 and freq_start < freq_end:
-        points = np.linspace(0, duration, sample_rate * duration, endpoint=False)
-        frequences = np.linspace(freq_start, freq_end, len(points))
-
-        signal = amplitude * np.sin(2 * np.pi * np.cumsum(frequences) / sample_rate)
-
-        user_answer_rewrite = input("If file with the same name exists in current directory, the program will rewrite it. Do you agree to continue?(Y/N): ")
-        if user_answer_rewrite.upper() == "Y":
-            name = "test"
-            filename = f"{name}.wav"
-            abs_path_soundfile = os.path.abspath(filename)
-            abs_path_logfile = None
-            sf.write(filename, signal, sample_rate)
-            data, sample_rate_ = sf.read(filename)
-            user_answer_writelog = input("Do you want to create a log file, which contains sound file features?(Y/N): ")
-            log_saved = False
-                
-            if user_answer_writelog.upper() == "Y":
-                log_filename = f"{name}.log"
-                log_file_path = os.path.join(os.path.dirname(filename), log_filename)
-                abs_path_logfile = os.path.abspath(log_file_path)
-                with open(log_file_path, "w") as f:
-                    f.write(f"Sound file path: {abs_path_soundfile};\n")
-                    f.write(f"Creating date and time(local): {datetime.now()};\n")
-                    f.write(f"Sample rate: {sample_rate_} Hz;\n")
-                    f.write(f"Duration: {duration} s;\n")
-                    f.write(f"Amplitude: {amplitude};\n")
-                    f.write(f"Frequences range: {freq_start} - {freq_end} Hz.")
-
-                log_saved = True
-
-            elif user_answer_writelog.upper() == "N":
-                pass
-
+def get_sample_rate():
+    while True:
+        value = input("Enter sample rate (from 1 to 768000 Hz): ")
+        try:
+            rate = int(value)
+            if 1 <= rate <= 768000:
+                return rate
             else:
-                print("Type of answer is incorrect")
-                
-            user_answer_open = input("Do you want to open generated sound file immediately?(Y/N): ")
-                
-            if user_answer_open.upper() == "Y":
-                system = platform.system()
+                print("Sample rate must be between 1 and 768000 Hz.")
+        except ValueError:
+            print("Invalid input. Sample rate must be a whole number.")
 
-                if system == "Windows":
-                    os.startfile(abs_path_soundfile)
-                elif system == "Darwin":
-                    subprocess.run(["open", abs_path_soundfile])
-                elif system == "Linux":
-                    subprocess.run(["xdg-open", abs_path_soundfile])
-                else:
-                    print("OS is unsupported for auto-open:(")
-                    
-            elif user_answer_open.upper() == "N":
-                print("File opening was rejected")
-                
+def get_duration():
+    while True:
+        value = input("Enter duration (from 1 to 60 seconds): ")
+        try:
+            duration = int(value)
+            if 1 <= duration <= 60:
+                return duration
             else:
-                print("Type of answer is incorrect")
+                print("Duration must be between 1 and 60 seconds.")
+        except ValueError:
+            print("Invalid input. Duration must be a whole number.")
 
-
-            if sample_rate < freq_end * 2:
-                print("Warning: sample rate should be at least 2 times greater than the highest frequency point for normal sound.")
-            
-            print(f"Sound file was saved. Path: {abs_path_soundfile}")
-            if log_saved:
-                print(f"Log file was saved. Path: {abs_path_logfile}")
-                input("Press Enter key to close this tab...")
+def get_amplitude():
+    while True:
+        value = input("Enter amplitude (from 0 to 1): ")
+        try:
+            amplitude = float(value)
+            if 0 <= amplitude <= 1:
+                return amplitude
             else:
-                print("Log file was not saved")
-                input("Press Enter key to close this tab... ")
-            return True
-            
-        elif user_answer_rewrite.upper() == "N":
-            print("Continuing was rejected")
-            print("File was not saved")
-            input("Press Enter key to close this tab... ")
-            return False
-            
-        else:
-            print("Type of answer is incorrect")
-            print("File was not saved")
-            input("Press Enter key to close this tab... ")
-            return False
-        
+                print("Amplitude must be between 0 and 1.")
+        except ValueError:
+            print("Invalid input. Amplitude must be a number between 0 and 1.")
+
+def get_freq_start():
+    while True:
+        value = input("Enter the lowest frequency point (≥ 1 Hz): ")
+        try:
+            freq = int(value)
+            if freq >= 1:
+                return freq
+            else:
+                print("Lowest frequency must be 0 Hz or higher.")
+        except ValueError:
+            print("Invalid input. Frequency must be a whole number.")
+
+def get_freq_end(freq_start):
+    while True:
+        value = input("Enter the highest frequency point (≤ 384000 Hz): ")
+        try:
+            freq = int(value)
+            if freq <= 384000:
+                return freq
+            elif freq <= freq_start:
+                print("Highest frequency must be greater than the starting frequency.")
+            else:
+                print("Highest frequency must not exceed 384000 Hz.")
+        except ValueError:
+            print("Invalid input. Frequency must be a whole number.")
+
+def get_yes_no(prompt):
+    while True:
+        answers = ["Y", "N"]
+        answer = input(prompt).strip().upper()
+        if answer in answers:
+            return answer
+        print("Please enter 'Y' or 'N'.")
+
+def generate_wave(sample_rate, duration, amplitude, freq_start, freq_end):
+    points = np.linspace(0, duration, sample_rate * duration, endpoint=False)
+    frequencies = np.linspace(freq_start, freq_end, len(points))
+    signal = amplitude * np.sin(2 * np.pi * np.cumsum(frequencies) / sample_rate)
+    return signal
+
+def save_wave(filename, signal, sample_rate):
+    sf.write(filename, signal, sample_rate)
+
+def create_log(filename, sample_rate, duration, amplitude, freq_start, freq_end):
+    log_filename = f"{filename}.log"
+    abs_path = os.path.abspath(log_filename)
+    with open(log_filename, "w") as f:
+        f.write(f"Sound file path: {os.path.abspath(filename)};\n")
+        f.write(f"Creating date and time(local): {datetime.now()};\n")
+        f.write(f"Sample rate: {sample_rate} Hz;\n")
+        f.write(f"Duration: {duration} s;\n")
+        f.write(f"Amplitude: {amplitude};\n")
+        f.write(f"Frequencies range: {freq_start} - {freq_end} Hz.")
+    return abs_path
+
+def open_file(filepath):
+    system = platform.system()
+    if system == "Windows":
+        os.startfile(filepath)
+    elif system == "Darwin":
+        subprocess.run(["open", filepath])
+    elif system == "Linux":
+        subprocess.run(["xdg-open", filepath])
     else:
-        print("Error. Some of inputs have incorrect values. Correct values:")
-        print("Sample rate: [500; 384000]")
-        print("Duration: [1; 10]")
-        print("Amplitude: [0; 1]")
-        print("Frequency(from lowest to highest point): [0; 192000]")
-        input("Press Enter key to close this tab...")
-        return False
+        print("OS is unsupported for auto-open.")
+
+def main():
+    print("Console program for generating sound waves.")
+    
+    while True:
+        sample_rate = get_sample_rate()
+        duration = get_duration()
+        amplitude = get_amplitude()
+        freq_start = get_freq_start()
+        freq_end = get_freq_end(freq_start)
+
+        filename = "test.wav"
+        abs_path_soundfile = os.path.abspath(filename)
+        if os.path.exists(filename):
+            overwrite = get_yes_no("File already exists. Overwrite? (Y/N): ")
+            if overwrite == "N":
+                print("Aborting operation.")
+                continue
+        
+        signal = generate_wave(sample_rate, duration, amplitude, freq_start, freq_end)
+        save_wave(filename, signal, sample_rate)
+
+        write_log = get_yes_no("Do you want to create a log file? (Y/N): ")
+        log_path = None
+        if write_log == "Y":
+            log_path = create_log("test", sample_rate, duration, amplitude, freq_start, freq_end)
+
+        open_now = get_yes_no("Open generated sound file now? (Y/N): ")
+        if open_now == "Y":
+            open_file(abs_path_soundfile)
+        
+        if freq_start > freq_end:
+            print("Warning: Start (lower) frequency point is greater then highest (end) frequency point. The sound wave will be descending")
+
+        if sample_rate < freq_end * 2:
+            print("Warning: Sample rate should be at least 2x the highest frequency for correct sound reproduction.")
+
+        print(f"\nSound file saved at: {abs_path_soundfile}")
+        if log_path:
+            print(f"Log file saved at: {log_path}")
+        else:
+            print("Log file was not saved.")
+
+        repeat = get_yes_no("Generate another sound wave? (Y/N): ")
+        if repeat == "N":
+            print("Exiting program.")
+            break
+        elif repeat == "Y":
+            continue
+        else:
+            print("Answer is incorrect")
 
 if __name__ == "__main__":
     main()
