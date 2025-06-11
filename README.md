@@ -4,10 +4,10 @@ A simple tool to generate sound waves based on user-defined parameters.
 
 ## Parameters
 
-- **Sample rate:** 1 to 768000 Hz  
+- **Sample rate:** from 1 to 768000 Hz  
 - **Duration:** 1 to 60 seconds  
 - **Amplitude:** float from 0 to 1  
-- **Frequency:** 1 to 384000 Hz  
+- **Frequency:** from 1 to 384000 Hz  
 
 All parameter ranges are inclusive.
 
