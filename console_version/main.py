@@ -115,12 +115,13 @@ def main():
         freq_start = get_freq_start()
         freq_end = get_freq_end(freq_start)
 
-        filename = "test.wav"
+        main_part = "audio"
+        filename = f"{main_part}.wav"
         abs_path_soundfile = os.path.abspath(filename)
         if os.path.exists(filename):
             overwrite = get_yes_no("File already exists. Overwrite? (Y/N): ")
             if overwrite == "N":
-                print("Aborting operation.")
+                print("Cancelling operation.")
                 continue
         
         signal = generate_wave(sample_rate, duration, amplitude, freq_start, freq_end)
@@ -129,14 +130,14 @@ def main():
         write_log = get_yes_no("Do you want to create a log file? (Y/N): ")
         log_path = None
         if write_log == "Y":
-            log_path = create_log("test", sample_rate, duration, amplitude, freq_start, freq_end)
+            log_path = create_log(main_part, sample_rate, duration, amplitude, freq_start, freq_end)
 
         open_now = get_yes_no("Open generated sound file now? (Y/N): ")
         if open_now == "Y":
             open_file(abs_path_soundfile)
         
         if freq_start > freq_end:
-            print("Warning: Start (lower) frequency point is greater then highest (end) frequency point. The sound wave will be descending")
+            print("Warning: Start (lower) frequency point is greater then highest (end) frequency point. The sound wave will be descending.")
 
         if sample_rate < freq_end * 2:
             print("Warning: Sample rate should be at least 2x the highest frequency for correct sound reproduction.")
@@ -151,10 +152,5 @@ def main():
         if repeat == "N":
             print("Exiting program.")
             break
-        elif repeat == "Y":
-            continue
-        else:
-            print("Answer is incorrect")
-
 if __name__ == "__main__":
     main()
