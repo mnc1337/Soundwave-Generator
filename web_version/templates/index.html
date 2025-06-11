@@ -102,12 +102,11 @@
                 !isNaN(amplitude) &&
                 !isNaN(lowerFreq) &&
                 !isNaN(higherFreq) &&
-                sampleRate >= 1000 && sampleRate <= 384000 &&
-                duration >= 1 && duration <= 10 &&
+                sampleRate >= 1 && sampleRate <= 768000 &&
+                duration >= 1 && duration <= 60 &&
                 amplitude >= 0 && amplitude <= 1 &&
-                lowerFreq >= 20 &&
-                higherFreq <= 20000 &&
-                lowerFreq < higherFreq
+                lowerFreq >= 1 &&
+                higherFreq <= 384000
             ) {
                 if (!form.checkValidity()) {
                     form.reportValidity();
