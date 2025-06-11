@@ -13,10 +13,9 @@ All parameter ranges are inclusive.
 
 ## Versions
 
-There are three versions of the program:  
-- Console application (.exe)  
-- Python script (.py)  
-- Web interface (browser-based)  
+There are two versions of the program:  
+- Console application (.exe);
+- Web interface (browser-based).
 
 ## Output
 
