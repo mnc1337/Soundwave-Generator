@@ -22,6 +22,10 @@ There are two versions of the program:
 - The generated sound wave is saved as a `.wav` file (raw, uncompressed audio).  
 - Optionally, you can save a `.log` file with all file parameters, which will be created in the same directory as the sound file.
 
+## Security
+
+Directory `archive (7z)` contains archive and it`s hash sums, derived in different algorithms.
+
 ## License
 
 This project is under MIT license. See the `LICENSE` file in the root directory for details.
